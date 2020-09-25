@@ -1,35 +1,47 @@
 /* Grid notes
     1. The grid is a square
     2. The limit is the length of one side
-    3. The quotient of the css grid by div widths equals the limit */
+    3. The quotient of the grid width in pixels
+            by a div width equals the limit */
 
 document.addEventListener('DOMContentLoaded', () => {
-  const grid = document.querySelectorAll('.grid div');
-  let limit = 15;
+  const grid = document.getElementById("grid");
+  let limit = 25;
   let index = 97;
-  grid[index].classList.add('player');
+  const playerColor = "orange";
+  const gridColor = "white";
+
+  for (let i = 0; i < limit * limit; i++) {
+    const div = document.createElement("div");
+    div.setAttribute("class", "gridElement");
+    grid.appendChild(div);
+  }
+
+  const gridElements = document.getElementsByClassName("gridElement");
+  gridElements[index].style.backgroundColor = playerColor;
 
   function movePlayer(e) {
-    grid[index].classList.remove('player');
+    gridElements[index].style.backgroundColor = gridColor;
     switch(e.keyCode) {
-      case 37: // l
-        if (index % limit === 0) index += 14;
+      case 37:
+        if (index % limit === 0) index += limit - 1;
         else if (index % limit !== 0) index -= 1;
         break;
-      case 38: // u
-        if (index <= 14 && index >= 0) index+= 210;
-        else if (index > 14) index -= 15;
+      case 38:
+        if (index <= limit - 1 && index >= 0) index += (limit * limit) - limit;
+        else if (index > limit - 1) index -= limit;
         break;
-      case 39: // r
-        if (index % limit >= limit - 1) index -= 14;
+      case 39:
+        if (index % limit >= limit - 1) index -= limit - 1;
         else if (index % limit < limit - 1) index += 1;
         break;
-      case 40: // d
-        if (index >= 210) index -= 210;
-        else if (index < 210) index += 15;
+      case 40:
+        if (index >= (limit * limit) - limit) index -= (limit * limit) - limit;
+        else if (index < (limit * limit) - limit) index += limit;
         break;
     }
-    grid[index].classList.add('player');
+
+    gridElements[index].style.backgroundColor = playerColor;
   }
 
   document.addEventListener('keydown', movePlayer);
